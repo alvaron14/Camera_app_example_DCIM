@@ -14,8 +14,6 @@ import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.Preview;
-import androidx.camera.core.impl.ImageCaptureConfig;
-import androidx.camera.core.impl.utils.executor.CameraXExecutors;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
@@ -25,7 +23,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -44,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // DAM: Unless you ask for permissions there is nothing to do
+        // DAM: Also grant all the permissions for the app in the device
+        allPermissionsGranted();
 
 
         PreviewView previewView = binding.viewFinder;
@@ -105,27 +106,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(allPermissionsGranted()){
+        if (allPermissionsGranted()) {
             //startCamera();
-        } else{
+        } else {
             Toast.makeText(this, "Permissions not granted by the user.", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
 
-    private boolean allPermissionsGranted(){
-        for(String permission : REQUIRED_PERMISSIONS){
-            if(ContextCompat.checkSelfPermission(getApplicationContext(), permission) != PackageManager.PERMISSION_GRANTED){
+    private boolean allPermissionsGranted() {
+        for (String permission : REQUIRED_PERMISSIONS) {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+                Log.d("DAM", "Permissions denied");
                 return false;
             }
         }
+        Log.d("DAM", "Permissions granted");
         return true;
     }
 
     public void onClick() {
+
+        // DAM: The image will be stored at /storage/emulated/0/Android/data/alvaron14.tutorial.cameraxapp/files/Pictures
         File outputFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
                 "test_" + System.currentTimeMillis() + ".png");
-
         try {
             outputFile.createNewFile();
         } catch (IOException e) {
@@ -134,7 +138,8 @@ public class MainActivity extends AppCompatActivity {
 
         ImageCapture.OutputFileOptions outputFileOptions =
                 new ImageCapture.OutputFileOptions.Builder(outputFile).build();
-        imageCapture.takePicture(outputFileOptions, ContextCompat.getMainExecutor(this), //Executors.newSingleThreadExecutor()
+        // DAM: I have changed the Executor, just in case
+        imageCapture.takePicture(outputFileOptions, Executors.newSingleThreadExecutor(), //Executors.newSingleThreadExecutor()
                 new ImageCapture.OnImageSavedCallback() {
                     @Override
                     public void onImageSaved(ImageCapture.OutputFileResults outputFileResults) {
@@ -145,6 +150,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onError(ImageCaptureException error) {
                         Log.d("PHOTO", "onError: " + error);
                     }
-        });
+                });
     }
 }
