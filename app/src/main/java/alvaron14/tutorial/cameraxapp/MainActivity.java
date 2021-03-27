@@ -1,11 +1,15 @@
 package alvaron14.tutorial.cameraxapp;
 
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -70,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Choose the camera by requiring a lens facing
                 CameraSelector cameraSelector = new CameraSelector.Builder()
-                        .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
+                        .requireLensFacing(CameraSelector.LENS_FACING_BACK) //<------- Change Lens facing
                         .build();
 
                 // Attach use cases to the camera with the same lifecycle owner
@@ -148,6 +152,20 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onImageSaved(ImageCapture.OutputFileResults outputFileResults) {
                         Log.d("PHOTO", "onImageSaved: saved");
+                        File image = new File(outputFile.toURI());
+                        if (image.exists()) {
+                            Bitmap myBitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    binding.imageView.setImageBitmap(myBitmap);
+                                }
+                            });
+
+
+                        }
+
                     }
 
                     @Override
