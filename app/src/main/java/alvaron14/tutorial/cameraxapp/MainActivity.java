@@ -1,6 +1,7 @@
 package alvaron14.tutorial.cameraxapp;
 
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA",
             "android.permission.WRITE_EXTERNAL_STORAGE"};
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         // DAM: Unless you ask for permissions there is nothing to do
         // DAM: Also grant all the permissions for the app in the device
+        requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
         allPermissionsGranted();
 
 
