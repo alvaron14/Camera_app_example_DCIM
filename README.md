@@ -3,4 +3,7 @@ Simple app that can:
   -Show how to take photos with the built system camera  
   -Save images with in the DIRECTORY_DCIM  
   -Load last photo in a ImageView  
-  -Load a random photo from DIRECTORY_DCIM
+  -Load a random photo from DIRECTORY_DCIM  
+
+Additional info:  
+  -This project implements viewBinding, check build.gradle(Module)
