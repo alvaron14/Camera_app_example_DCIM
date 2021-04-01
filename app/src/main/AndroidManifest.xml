@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="alvaron14.tutorial.cameraxapp">
+    package="alvaron14.tutorial.camera_app">
 
     <uses-feature android:name="android.hardware.camera.any" />
 

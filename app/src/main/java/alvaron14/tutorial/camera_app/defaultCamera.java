@@ -1,4 +1,4 @@
-package alvaron14.tutorial.cameraxapp;
+package alvaron14.tutorial.camera_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -7,14 +7,11 @@ import androidx.core.content.FileProvider;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
-import android.webkit.MimeTypeMap;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,7 +21,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import alvaron14.tutorial.cameraxapp.databinding.ActivityDefaultCameraBinding;
+import alvaron14.tutorial.camera_app.databinding.ActivityDefaultCameraBinding;
 
 public class defaultCamera extends AppCompatActivity {
     private ActivityDefaultCameraBinding binding;
@@ -58,7 +55,7 @@ public class defaultCamera extends AppCompatActivity {
             intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
             Uri photoURI = FileProvider.getUriForFile(
                     defaultCamera.this,
-                    "alvaron14.tutorial.cameraxapp.provider", //(use your app signature + ".provider" )
+                    getApplicationContext().getPackageName() + ".provider", //(use your app signature + ".provider" )
                     createImageFile());
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
